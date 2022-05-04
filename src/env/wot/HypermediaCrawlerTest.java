@@ -21,7 +21,7 @@ import cartago.*;
 public class HypermediaCrawlerTest {
 
     private static final String BASE_URL = "http://api.interactions.ics.unisg.ch/hypermedia-environment/was/";
-    private static final String FILE_PATH = "./additional-resources/discovered-org.xml";
+    private static final String FILE_PATH = "./src/org/temp-os.xml";
 
     public void searchEnvironment(String relationType) {
 

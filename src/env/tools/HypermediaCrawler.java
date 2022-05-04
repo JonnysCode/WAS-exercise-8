@@ -25,7 +25,7 @@ An artifact crawling a hypermedia environment starting from an entry point URL
 public class HypermediaCrawler extends Artifact {
 
   private static final String BASE_URL = "http://api.interactions.ics.unisg.ch/hypermedia-environment/was/";
-  private static final String FILE_PATH = "./additional-resources/discovered-org.xml";
+  private static final String FILE_PATH = "./src/org/temp-os.xml";
   private String entryPoint;
 
   public void init(String url) {

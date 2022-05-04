@@ -17,8 +17,30 @@ sch_name("monitoring_scheme").
   sch_name(SchemeName)
 <-
   .print("I will initialize an organization ", OrgName, " with a group ", GroupName, " and a scheme ", SchemeName, " in workspace ", OrgName);
+  
+  // 1.2 Discover organization 
   makeArtifact("crawler", "tools.HypermediaCrawler", ["581b07c7dff45162"], CrawlerArtId);
-  focus(CrawlerArtId).
+  focus(CrawlerArtId);
+  searchEnvironment("Monitor Temperature", FilePath);
+  .print("File is at ", FilePath);
+
+  // 1.3 Initialize organization
+  makeArtifact(OrgName, "ora4mas.nopl.OrgBoard", [FilePath], OrgArtId);
+  focus(OrgArtId);
+
+  // 1.4 Create group and scheme
+  createGroup(GroupName, GroupName, GrpArtId);
+  focus(GrpArtId);
+  createScheme(SchemeName, SchemeName, SchArtId);
+  focus(SchArtId);
+
+  // 1.5 Broadcast
+  .broadcast(tell, orgDeployments(OrgName, GroupName));
+
+  // 1.6 
+  ?formationStatus(ok)[artifact_id(GrpArtId)];
+  addScheme(SchemeName)[artifact_id(GrpArtId)].
+
 
 // Plan to add an organization artifact to the inspector_gui
 // You can use this plan after creating an organizational artifact so that you can inspect it
