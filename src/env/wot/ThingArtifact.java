@@ -13,10 +13,7 @@ import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.http.Header;
 
 import cartago.Artifact;
-import cartago.LINK;
 import cartago.OPERATION;
-import cartago.OUTPORT;
-import cartago.ARTIFACT_INFO;
 import cartago.OpFeedbackParam;
 import ch.unisg.ics.interactions.wot.td.ThingDescription;
 import ch.unisg.ics.interactions.wot.td.ThingDescription.TDFormat;
@@ -35,8 +32,10 @@ import ch.unisg.ics.interactions.wot.td.vocabularies.TD;
 import ch.unisg.ics.interactions.wot.td.vocabularies.WoTSec;
 
 /**
- * A CArtAgO artifact that can interpret a W3C WoT Thing Description (TD) and exposes the affordances
- * of the described Thing to agents. The artifact uses the hypermedia controls provided in the TD to
+ * A CArtAgO artifact that can interpret a W3C WoT Thing Description (TD) and
+ * exposes the affordances
+ * of the described Thing to agents. The artifact uses the hypermedia controls
+ * provided in the TD to
  * compose and issue HTTP requests for the exposed affordances.
  *
  * Contributors:
@@ -51,17 +50,18 @@ public class ThingArtifact extends Artifact {
   protected boolean dryRun;
   private Optional<String> apiKey;
 
-  private static Map<Integer, List> displacements  = new HashMap();
+  private static Map<Integer, List> displacements = new HashMap();
 
   static {
-    displacements.put(0, Arrays.asList(200,150));
-    displacements.put(512, Arrays.asList(100,150));
-    displacements.put(256, Arrays.asList(150,200));
-    displacements.put(768, Arrays.asList(150,100));
+    displacements.put(0, Arrays.asList(200, 150));
+    displacements.put(512, Arrays.asList(100, 150));
+    displacements.put(256, Arrays.asList(150, 200));
+    displacements.put(768, Arrays.asList(150, 100));
   }
 
   /**
-   * Method called by CArtAgO to initialize the artifact. The W3C WoT Thing Description (TD) used by
+   * Method called by CArtAgO to initialize the artifact. The W3C WoT Thing
+   * Description (TD) used by
    * this artifact is retrieved and parsed during initialization.
    *
    * @param url A URL that dereferences to a W3C WoT Thing Description.
@@ -84,10 +84,11 @@ public class ThingArtifact extends Artifact {
   }
 
   /**
-   * Method called by CArtAgO to initialize the artifact. The W3C WoT Thing Description (TD) used by
+   * Method called by CArtAgO to initialize the artifact. The W3C WoT Thing
+   * Description (TD) used by
    * this artifact is retrieved and parsed during initialization.
    *
-   * @param url A URL that dereferences to a W3C WoT Thing Description.
+   * @param url    A URL that dereferences to a W3C WoT Thing Description.
    * @param dryRun When set to true, the requests are logged, but not executed.
    */
   public void init(String url, boolean dryRun) {
@@ -96,11 +97,14 @@ public class ThingArtifact extends Artifact {
   }
 
   /**
-   * CArtAgO operation for reading a property of a Thing using a semantic model of the Thing.
+   * CArtAgO operation for reading a property of a Thing using a semantic model of
+   * the Thing.
    *
-   * @param propertyTag Either an IRI that identifies the property type, or the property's name.
-   * @param output The read value. Can be a list of one or more primitives, or a nested list of
-   * primitives or arbitrary depth.
+   * @param propertyTag Either an IRI that identifies the property type, or the
+   *                    property's name.
+   * @param output      The read value. Can be a list of one or more primitives,
+   *                    or a nested list of
+   *                    primitives or arbitrary depth.
    */
   @OPERATION
   public void readProperty(String propertyTag, OpFeedbackParam<Object[]> output) {
@@ -108,12 +112,16 @@ public class ThingArtifact extends Artifact {
   }
 
   /**
-   * CArtAgO operation for reading a property of a Thing using a semantic model of the Thing.
+   * CArtAgO operation for reading a property of a Thing using a semantic model of
+   * the Thing.
    *
-   * @param propertyTag Either an IRI that identifies the property type, or the property's name.
-   * @param payloadTags A list of IRIs or object property names (if property is an object schema).
-   * @param output The read value. Can be a list of one or more primitives, or a nested list of
-   * primitives or arbitrary depth.
+   * @param propertyTag Either an IRI that identifies the property type, or the
+   *                    property's name.
+   * @param payloadTags A list of IRIs or object property names (if property is an
+   *                    object schema).
+   * @param output      The read value. Can be a list of one or more primitives,
+   *                    or a nested list of
+   *                    primitives or arbitrary depth.
    */
   @OPERATION
   public void readProperty(String propertyTag, OpFeedbackParam<Object[]> payloadTags,
@@ -122,10 +130,12 @@ public class ThingArtifact extends Artifact {
   }
 
   /**
-   * CArtAgO operation for writing a property of a Thing using a semantic model of the Thing.
+   * CArtAgO operation for writing a property of a Thing using a semantic model of
+   * the Thing.
    *
-   * @param propertyTag Either an IRI that identifies the property type, or the property's name.
-   * @param payload The payload to be issued when writing the property.
+   * @param propertyTag Either an IRI that identifies the property type, or the
+   *                    property's name.
+   * @param payload     The payload to be issued when writing the property.
    */
   @OPERATION
   public void writeProperty(String propertyTag, Object[] payload) {
@@ -133,11 +143,14 @@ public class ThingArtifact extends Artifact {
   }
 
   /**
-   * CArtAgO operation for writing a property of a Thing using a semantic model of the Thing.
+   * CArtAgO operation for writing a property of a Thing using a semantic model of
+   * the Thing.
    *
-   * @param propertyTag Either an IRI that identifies the property type, or the property's name.
-   * @param payloadTags A list of IRIs or object property names (if property is an object schema).
-   * @param payload The payload to be issued when writing the property.
+   * @param propertyTag Either an IRI that identifies the property type, or the
+   *                    property's name.
+   * @param payloadTags A list of IRIs or object property names (if property is an
+   *                    object schema).
+   * @param payload     The payload to be issued when writing the property.
    */
   @OPERATION
   public void writeProperty(String propertyTag, Object[] payloadTags, Object[] payload) {
@@ -156,10 +169,12 @@ public class ThingArtifact extends Artifact {
   }
 
   /**
-   * CArtAgO operation for invoking an action on a Thing using a semantic model of the Thing.
+   * CArtAgO operation for invoking an action on a Thing using a semantic model of
+   * the Thing.
    *
-   * @param actionTag Either an IRI that identifies the action type, or the action's name.
-   * @param payload The payload to be issued when invoking the action.
+   * @param actionTag Either an IRI that identifies the action type, or the
+   *                  action's name.
+   * @param payload   The payload to be issued when invoking the action.
    */
   @OPERATION
   public void invokeAction(String actionTag, Object[] payload) {
@@ -172,11 +187,14 @@ public class ThingArtifact extends Artifact {
   }
 
   /**
-   * CArtAgO operation for invoking an action on a Thing using a semantic model of the Thing.
+   * CArtAgO operation for invoking an action on a Thing using a semantic model of
+   * the Thing.
    *
-   * @param actionTag Either an IRI that identifies the action type, or the action's name.
-   * @param payloadTags A list of IRIs or object property names (used for object schema payloads).
-   * @param payload The payload to be issued when invoking the action.
+   * @param actionTag   Either an IRI that identifies the action type, or the
+   *                    action's name.
+   * @param payloadTags A list of IRIs or object property names (used for object
+   *                    schema payloads).
+   * @param payload     The payload to be issued when invoking the action.
    */
   @OPERATION
   public void invokeAction(String actionTag, Object[] payloadTags, Object[] payload) {
@@ -213,7 +231,8 @@ public class ThingArtifact extends Artifact {
   }
 
   /**
-   * CArtAgO operation that sets an authentication token (used with APIKeySecurityScheme).
+   * CArtAgO operation that sets an authentication token (used with
+   * APIKeySecurityScheme).
    *
    * @param token The authentication token.
    */
@@ -255,7 +274,7 @@ public class ThingArtifact extends Artifact {
       Object[] payload) {
     Map<String, Object> requestPayload = new HashMap<String, Object>();
 
-    for (int i = 0; i < tags.length; i ++) {
+    for (int i = 0; i < tags.length; i++) {
       if (tags[i] instanceof String) {
         requestPayload.put((String) tags[i], payload[i]);
       }
@@ -272,29 +291,37 @@ public class ThingArtifact extends Artifact {
     return request;
   }
 
-  /*@LINK
-  public void onNotification(Notification notification) {
-    log("The state of this ThingArtifact has changed: " + notification.getMessage());
+  /*
+   * @LINK
+   * public void onNotification(Notification notification) {
+   * log("The state of this ThingArtifact has changed: " +
+   * notification.getMessage());
+   * 
+   * String obsProp = notification.getMessage();
+   * String functor = obsProp.substring(0, obsProp.indexOf("("));
+   * String[] params = obsProp.substring(obsProp.indexOf("(") + 1,
+   * obsProp.length() - 1)
+   * .split(",");
+   * 
+   * if (this.hasObsPropertyByTemplate(functor, (Object[]) params)) {
+   * this.updateObsProperty(functor, (Object[]) params);
+   * } else {
+   * this.defineObsProperty(functor, (Object[]) params);
+   * }
+   * }
+   */
 
-    String obsProp = notification.getMessage();
-    String functor = obsProp.substring(0, obsProp.indexOf("("));
-    String[] params = obsProp.substring(obsProp.indexOf("(") + 1, obsProp.length() - 1)
-        .split(",");
-
-    if (this.hasObsPropertyByTemplate(functor, (Object[]) params)) {
-      this.updateObsProperty(functor, (Object[]) params);
-    } else {
-      this.defineObsProperty(functor, (Object[]) params);
-    }
-  }*/
-
-  /* Registers for WebSub to an Yggdrasil node. This is not a generic implementation, but one
-   * specific to Yggdrasil. */
+  /*
+   * Registers for WebSub to an Yggdrasil node. This is not a generic
+   * implementation, but one
+   * specific to Yggdrasil.
+   */
   private void exposeWebSubIRIs(String url) {
     try {
       Header[] headers = Request.get(url).execute().returnResponse().getHeaders("Link");
 
-      // This current implementation is specific to Yggdrasil, not a general implementation
+      // This current implementation is specific to Yggdrasil, not a general
+      // implementation
       if (headers.length != 2) {
         return;
       }
@@ -350,7 +377,10 @@ public class ThingArtifact extends Artifact {
     }
   }
 
-  /* Tries to retrieve a property first by semantic tag, then by name. Fails if none works. */
+  /*
+   * Tries to retrieve a property first by semantic tag, then by name. Fails if
+   * none works.
+   */
   private PropertyAffordance getPropertyOrFail(String propertyTag) {
     Optional<PropertyAffordance> property = td.getFirstPropertyBySemanticType(propertyTag);
 
@@ -366,8 +396,10 @@ public class ThingArtifact extends Artifact {
   }
 
   // Reading payloads of type object currently works with 2 limitations:
-  // - only the first semantic tag is retrieved for object properties (one that is not a data schema)
-  // - we cannot use nested objects with the current ThingArtifact API (needs a more elaborated
+  // - only the first semantic tag is retrieved for object properties (one that is
+  // not a data schema)
+  // - we cannot use nested objects with the current ThingArtifact API (needs a
+  // more elaborated
   // JaCa - WoT bridge)
   @SuppressWarnings("unchecked")
   private void readPayloadWithSchema(TDHttpResponse response, DataSchema schema,
@@ -387,7 +419,8 @@ public class ThingArtifact extends Artifact {
         output.set(new Double[] { response.getPayloadAsDouble() });
         break;
       case DataSchema.OBJECT:
-        // Only consider this case if the invoked CArtAgO operation was for an object payload
+        // Only consider this case if the invoked CArtAgO operation was for an object
+        // payload
         // (i.e., a list of tags is expected).
         if (tags.isPresent()) {
           Map<String, Object> payload = response.getPayloadAsObject((ObjectSchema) schema);
@@ -421,7 +454,7 @@ public class ThingArtifact extends Artifact {
   Object[] nestedListsToArrays(Collection<Object> data) {
     Object[] out = data.toArray();
 
-    for (int i = 0; i < out.length; i ++) {
+    for (int i = 0; i < out.length; i++) {
       if (out[i] instanceof Collection<?>) {
         out[i] = nestedListsToArrays((Collection<Object>) out[i]);
       }
@@ -431,7 +464,7 @@ public class ThingArtifact extends Artifact {
   }
 
   private Optional<TDHttpResponse> executePropertyRequest(PropertyAffordance property,
-    String operationType, Object[] tags, Object[] payload) {
+      String operationType, Object[] tags, Object[] payload) {
     Optional<Form> form = property.getFirstFormForOperationType(operationType);
 
     if (!form.isPresent()) {
@@ -508,7 +541,7 @@ public class ThingArtifact extends Artifact {
 
     // Set a header with the id of the operating agent
     request.addHeader("X-Agent-WebID", WEBID_PREFIX + getCurrentOpAgentId().getAgentName());
-    //log("operating agent: " + getCurrentOpAgentId().getAgentName());
+    // log("operating agent: " + getCurrentOpAgentId().getAgentName());
 
     if (this.dryRun) {
       log(request.toString());
