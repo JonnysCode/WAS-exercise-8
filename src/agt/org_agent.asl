@@ -16,7 +16,9 @@ sch_name("monitoring_scheme").
   group_name(GroupName) &
   sch_name(SchemeName)
 <-
-  .print("I will initialize an organization ", OrgName, " with a group ", GroupName, " and a scheme ", SchemeName, " in workspace ", OrgName).
+  .print("I will initialize an organization ", OrgName, " with a group ", GroupName, " and a scheme ", SchemeName, " in workspace ", OrgName);
+  makeArtifact("crawler", "tools.HypermediaCrawler", ["581b07c7dff45162"], CrawlerArtId);
+  focus(CrawlerArtId).
 
 // Plan to add an organization artifact to the inspector_gui
 // You can use this plan after creating an organizational artifact so that you can inspect it
