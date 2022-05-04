@@ -35,7 +35,7 @@ sch_name("monitoring_scheme").
   focus(SchArtId);
 
   // 1.5 Broadcast
-  .broadcast(tell, orgDeployments(OrgName, GroupName));
+  .broadcast(tell, deployedOrg(OrgName, GroupName));
 
   // 1.6 
   ?formationStatus(ok)[artifact_id(GrpArtId)];
