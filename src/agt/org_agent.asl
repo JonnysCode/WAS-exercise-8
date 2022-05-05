@@ -35,18 +35,34 @@ sch_name("monitoring_scheme").
   focus(SchArtId);
 
   // 1.5 Broadcast
-  .broadcast(tell, deployedOrg(OrgName, GroupName));
+  .broadcast(tell, deployedOrg(OrgName, GroupName, SchemeName));
 
   // 1.6 
-  ?formationStatus(ok)[artifact_id(GrpArtId)];
+  //?formationStatus(ok)[artifact_id(GrpArtId)];
+  ?manageFormation(OrgName, GroupName, SchemeName)[artifact_id(GrpArtId)];
+
   addScheme(SchemeName)[artifact_id(GrpArtId)].
 
+
++?manageFormation(OrgName, GroupName, SchemeName)[artifact_id(G)] : role(R, _) & not play(_, R, G) 
+<-
+  .print("Searching for Role: ", R);
+  .broadcast(tell, availableRole(OrgName, GroupName, SchemeName, R) ); 
+  .wait(15000);
+  ?manageFormation(OrgName, GroupName, SchemeName)[artifact_id(G)].
+
+/*
++?manageFormation(OrgName, GroupName, SchemeName)[artifact_id(G)] : formationStatus(ok)[artifact_id(GrpArtId)] 
+<-
+  .print("All roles are present").
+*/
 
 // Plan to add an organization artifact to the inspector_gui
 // You can use this plan after creating an organizational artifact so that you can inspect it
 +!inspect(OrganizationalArtifactId) : true
 <-
   debug(inspector_gui(on))[artifact_id(OrganizationalArtifactId)].
+
 
 // Plan to wait until the group managed by the Group Board artifact G is well-formed
 // Makes this intention suspend until the group is believed to be well-formed
@@ -55,14 +71,16 @@ sch_name("monitoring_scheme").
   .print("Waiting for group ", GroupName," to become well-formed")
   .wait({+formationStatus(ok)[artifact_id(G)]}).
 
+
 // Plan to react on events about an agent Ag adopting a role Role defined in group GroupId
 +play(Ag, Role, GroupId) : true
 <-
   .print("Agent ", Ag, " adopted the role ", Role, " in group ", GroupId).
+
 
 // Additional behavior
 { include("$jacamoJar/templates/common-cartago.asl") }
 { include("$jacamoJar/templates/common-moise.asl") }
 
 // Uncomment if you want to use the organization rules available in https://github.com/moise-lang/moise/blob/master/src/main/resources/asl/org-rules.asl
-//{ include("$moiseJar/asl/org-rules.asl") }
+{ include("$moiseJar/asl/org-rules.asl") }

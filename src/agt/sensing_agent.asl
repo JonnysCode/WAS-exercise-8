@@ -10,9 +10,6 @@ can_achieve (G) :-
 i_have_plans_for(R) :-
 	not (role_goal(R, G) & not can_achieve(G)).
 
-my_role(R) :-
-	role(R, _) & i_have_plans_for(R).
-
 /* Initial goals */
 !start.
 
@@ -28,7 +25,7 @@ my_role(R) :-
 	.print("Mock temperature reading (Celcious): 12.3").
 
 
-+deployedOrg(OrgName, GroupName): true <-
++deployedOrg(OrgName, GroupName, SchemeName): true <-
 	.print("Joining deployed org: ", OrgName);
 
 	lookupArtifact(OrgName, OrgArtId);
@@ -37,11 +34,16 @@ my_role(R) :-
 	lookupArtifact(GroupName, GrpArtId);
 	focus(GrpArtId);
 
-	!adoptRoles.
+	lookupArtifact(SchemeName, SchArtId);
+	focus(SchArtId);
+
+	!adoptRoles(GrpArtId).
 
 
-+!adoptRoles : role(R, _) & i_have_plans_for(R) <- 
-	.print("Adopting role: ", R).
++!adoptRoles(G) : role(R, _) & i_have_plans_for(R) & .my_name(Me)
+<- 
+	.print("Adopting role: ", R);
+	.broadcast(tell, play(Me, R, G)).
 
 
 { include("$jacamoJar/templates/common-cartago.asl") }
