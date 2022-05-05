@@ -39,23 +39,20 @@ sch_name("monitoring_scheme").
 
   // 1.6 
   //?formationStatus(ok)[artifact_id(GrpArtId)];
-  ?manageFormation(OrgName, GroupName, SchemeName)[artifact_id(GrpArtId)];
-
-  addScheme(SchemeName)[artifact_id(GrpArtId)].
+  !manageFormation(OrgName, GroupName, SchemeName)[artifact_id(GrpArtId)].
 
 
-+?manageFormation(OrgName, GroupName, SchemeName)[artifact_id(G)] : role(R, _) & not play(_, R, G) 
++!manageFormation(OrgName, GroupName, SchemeName)[artifact_id(G)] : role(R, _) & not play(_, R, G) 
 <-
   .print("Searching for Role: ", R);
   .broadcast(tell, availableRole(OrgName, GroupName, SchemeName, R) ); 
   .wait(15000);
-  ?manageFormation(OrgName, GroupName, SchemeName)[artifact_id(G)].
+  !manageFormation(OrgName, GroupName, SchemeName)[artifact_id(G)].
 
-/*
-+?manageFormation(OrgName, GroupName, SchemeName)[artifact_id(G)] : formationStatus(ok)[artifact_id(GrpArtId)] 
+
++!manageFormation(OrgName, GroupName, SchemeName)[artifact_id(G)] : true 
 <-
   .print("All roles are present").
-*/
 
 // Plan to add an organization artifact to the inspector_gui
 // You can use this plan after creating an organizational artifact so that you can inspect it
