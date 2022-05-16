@@ -21,9 +21,9 @@ i_have_plans_for(R) :-
 	.print("Hello from ",Me).
 
 // Plan to achieve manifesting the air temperature using a robotic arm
-+!manifest_temperature : true
++!manifest_temperature : temperature(TempValue)
 <-
-	.print("Mock temperature manifesting").
+	.print("Temperature manifesting: ", TempValue).
 
 
 +availableRole(OrgName, GroupName, SchemeName, R) : i_have_plans_for(R) & .my_name(Me)

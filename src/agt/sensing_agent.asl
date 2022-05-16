@@ -22,7 +22,14 @@ i_have_plans_for(R) :-
 
 // Plan to achieve reading the air temperature using a robotic arm
 +!read_temperature : true <-
-	.print("Mock temperature reading (Celcious): 12.3").
+	makeArtifact("weatherStation", "wot.ThingArtifact", ["https://raw.githubusercontent.com/Interactions-HSG/example-tds/was/tds/weather-station.ttl"], WeatherStatArtId);
+  	focus(WeatherStatArtId);
+	readProperty("Temperature", _, OutValue);
+	.print("output: ", OutValue)
+	.nth(0, OutValue, TempValue);
+	//.print(TempValue);
+	.broadcast(tell, temperature(TempValue));
+	.print("Agent temperature reading (Celcius): ", TempValue).
 
 
 +deployedOrg(OrgName, GroupName, SchemeName): true <-
