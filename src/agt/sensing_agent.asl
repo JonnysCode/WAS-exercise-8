@@ -32,7 +32,7 @@ i_have_plans_for(R) :-
 	.print("Agent temperature reading (Celcius): ", TempValue).
 
 
-+deployedOrg(OrgName, GroupName, SchemeName): true <-
++deployedOrg(OrgName, GroupName): true <-
 	.print("Joining deployed org: ", OrgName);
 
 	lookupArtifact(OrgName, OrgArtId);
@@ -40,9 +40,6 @@ i_have_plans_for(R) :-
 
 	lookupArtifact(GroupName, GrpArtId);
 	focus(GrpArtId);
-
-	lookupArtifact(SchemeName, SchArtId);
-	focus(SchArtId);
 
 	!adoptRoles(GrpArtId).
 

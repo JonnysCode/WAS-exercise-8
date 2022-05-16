@@ -26,16 +26,13 @@ i_have_plans_for(R) :-
 	.print("Temperature manifesting: ", TempValue).
 
 
-+availableRole(OrgName, GroupName, SchemeName, R) : i_have_plans_for(R) & .my_name(Me)
++availableRole(OrgName, GroupName, R) : i_have_plans_for(R) & .my_name(Me)
 <-
 	lookupArtifact(OrgName, OrgArtId);
 	focus(OrgArtId);
 
 	lookupArtifact(GroupName, GrpArtId);
 	focus(GrpArtId);
-
-	lookupArtifact(SchemeName, SchArtId);
-	focus(SchArtId);
 
 	.print("Adopting role: ", R)
 	.broadcast(tell, play(Me, R, GrpArtId)).
