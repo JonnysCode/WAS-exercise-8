@@ -23,7 +23,13 @@ i_have_plans_for(R) :-
 // Plan to achieve manifesting the air temperature using a robotic arm
 +!manifest_temperature : temperature(TempValue)
 <-
-	.print("Temperature manifesting: ", TempValue).
+	.print("Temperature manifesting using leubot: ", TempValue);
+	makeArtifact("converter", "tools.Converter", [], ConverterId);
+	convert(-20, 30, 200, 830, TempValue, ConvertedValue);
+	.print("Converted value ", ConvertedValue);
+	makeArtifact("leubot", "wot.ThingArtifact", ["https://raw.githubusercontent.com/Interactions-HSG/example-tds/was/tds/leubot1.ttl"], LeubotId);
+	setAPIKey("1a313a6c5340caf9d3dc51bab400e318");
+	invokeAction("setWristAngle", ["value"], [ConvertedValue]).
 
 
 +availableRole(OrgName, GroupName, R) : i_have_plans_for(R) & .my_name(Me)
@@ -34,8 +40,32 @@ i_have_plans_for(R) :-
 	lookupArtifact(GroupName, GrpArtId);
 	focus(GrpArtId);
 
-	.print("Adopting role: ", R)
-	.broadcast(tell, play(Me, R, GrpArtId)).
+	.print("Adopting role: ", R);
+	adoptRole(R).
+	//.broadcast(tell, play(Me, R, GrpArtId)).
+
+
++formationFailed : true 
+<- 
+	.print("formationFailed").
+	//!manifest_temperature.
+
+
+// From the book, p. 222 -> Thanks Marc :)
++obligation(Ag, MCond, committed(Ag,Mission,Scheme), Deadline) :
+  .my_name(Ag)
+  <-
+  .print("My obligation is ", Mission);
+  commitMission(Mission)[artifact_name(Scheme)];
+  lookupArtifact(Scheme, SchemeArtId);
+  focus(SchemeArtId).
+
++obligation(Ag, MCond, done(Scheme,Goal,Ag), Deadline) :
+  .my_name(Ag)
+  <-
+  .print("My goal is ", Goal);
+  !Goal[scheme(Scheme)];
+  goalAchieved(Goal)[artifact_name(Scheme)].
 
 
 { include("$jacamoJar/templates/common-cartago.asl") }

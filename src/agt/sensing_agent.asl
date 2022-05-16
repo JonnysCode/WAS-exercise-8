@@ -47,7 +47,30 @@ i_have_plans_for(R) :-
 +!adoptRoles(G) : role(R, _) & i_have_plans_for(R) & .my_name(Me)
 <- 
 	.print("Adopting role: ", R);
-	.broadcast(tell, play(Me, R, G)).
+	adoptRole(R).
+	//.broadcast(tell, play(Me, R, G)).
+
+
++formationFailed : true 
+<- 
+	!read_temperature.
+
+
+// From the book, p. 222 -> Thanks Marc :)
++obligation(Ag, MCond, committed(Ag,Mission,Scheme), Deadline) :
+  .my_name(Ag)
+  <-
+  .print("My obligation is ", Mission);
+  commitMission(Mission)[artifact_name(Scheme)];
+  lookupArtifact(Scheme, SchemeArtId);
+  focus(SchemeArtId).
+
++obligation(Ag, MCond, done(Scheme,Goal,Ag), Deadline) :
+  .my_name(Ag)
+  <-
+  .print("My goal is ", Goal);
+  !Goal[scheme(Scheme)];
+  goalAchieved(Goal)[artifact_name(Scheme)].
 
 
 { include("$jacamoJar/templates/common-cartago.asl") }
