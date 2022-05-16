@@ -27,7 +27,7 @@ i_have_plans_for(R) :-
 	makeArtifact("converter", "tools.Converter", [], ConverterId);
 	convert(-20, 30, 200, 830, TempValue, ConvertedValue);
 	.print("Converted value ", ConvertedValue);
-	makeArtifact("leubot", "wot.ThingArtifact", ["https://raw.githubusercontent.com/Interactions-HSG/example-tds/was/tds/leubot1.ttl"], LeubotId);
+	makeArtifact("leubot", "wot.ThingArtifact", ["https://raw.githubusercontent.com/Interactions-HSG/example-tds/was/tds/leubot1.ttl", true], LeubotId);
 	setAPIKey("1a313a6c5340caf9d3dc51bab400e318");
 	invokeAction("setWristAngle", ["value"], [ConvertedValue]).
 
