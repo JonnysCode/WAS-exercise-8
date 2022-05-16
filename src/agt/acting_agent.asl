@@ -51,18 +51,16 @@ i_have_plans_for(R) :-
 	//!manifest_temperature.
 
 
-// From the book, p. 222 -> Thanks Marc :)
-+obligation(Ag, MCond, committed(Ag,Mission,Scheme), Deadline) :
-  .my_name(Ag)
-  <-
+// Multi-Agent Oriented Programming 9.1
++obligation(Ag, MCond, committed(Ag, Mission, Scheme), Deadline) : .my_name(Ag)
+<-
   .print("My obligation is ", Mission);
   commitMission(Mission)[artifact_name(Scheme)];
   lookupArtifact(Scheme, SchemeArtId);
   focus(SchemeArtId).
 
-+obligation(Ag, MCond, done(Scheme,Goal,Ag), Deadline) :
-  .my_name(Ag)
-  <-
++obligation(Ag, MCond, done(Scheme,Goal,Ag), Deadline) : .my_name(Ag)
+<-
   .print("My goal is ", Goal);
   !Goal[scheme(Scheme)];
   goalAchieved(Goal)[artifact_name(Scheme)].

@@ -7,6 +7,11 @@ org_name("lab_monitoring_org").
 group_name("monitoring_team").
 sch_name("monitoring_scheme").
 
+has_enough_players_for(R) :-
+  role_cardinality(R, Min, Max) &
+  .count(play(_,R,_),NP) &
+  NP >= Min.
+
 /* Initial goals */
 !start.
 
@@ -18,6 +23,9 @@ sch_name("monitoring_scheme").
 <-
   .print("I will initialize an organization ", OrgName, " with a group ", GroupName, " and a scheme ", SchemeName, " in workspace ", OrgName);
   
+  makeArtifact("timer", "tools.Timer", [], TimerArtId);
+  focus(TimerArtId)
+
   // 1.2 Discover organization 
   makeArtifact("crawler", "tools.HypermediaCrawler", ["581b07c7dff45162"], CrawlerArtId);
   focus(CrawlerArtId);
@@ -40,11 +48,10 @@ sch_name("monitoring_scheme").
   // 1.6 
   //?formationStatus(ok)[artifact_id(GrpArtId)];
   !manageFormation(OrgName, GroupName);
-
   addScheme(SchemeName)[artifact_id(GrpArtId)].
 
 
-+!manageFormation(OrgName, GroupName) : role(R, _) & not play(_, R, G) 
++!manageFormation(OrgName, GroupName) : role(R, _) & not has_enough_players_for(R)
 <-
   .print("Searching for Role: ", R);
   .broadcast(tell, availableRole(OrgName, GroupName, R) ); 
@@ -81,7 +88,32 @@ sch_name("monitoring_scheme").
 // Plan to react on events about an agent Ag adopting a role Role defined in group GroupId
 +play(Ag, Role, GroupId) : true
 <-
-  .print("Agent ", Ag, " adopted the role ", Role, " in group ", GroupId).
+  if (not reputation(Ag, Reputation)) {
+    +reputation(Ag, 0);
+    .print("Agent ", Ag, " adopted role ", Role, " in group ", GroupId, " with Reputation of ", 0);
+  } else {
+    .print("Agent ", Ag, " adopted role ", Role, " in group ", GroupId, " with Reputation of ", Reputation);
+  }.
+
+
+// Multi-Agent Oriented Programming 9.1  -> Thanks Marc :)
+// Start mission once agents commits
++obligation(Ag, MCond, committed(Ag,Mission,Scheme), Deadline) : true 
+<-
+  getTime(Time);
+  +missionStarted(Ag, Time);
+  .print("Starting mission: ", Mission, " at ", Time).
+
+
+// Update reputation once agent achieves Goal
++oblFulfilled(obligation(Ag, MCond, done(Scheme,Goal,Ag), Deadline)) :
+  missionStarted(Ag, StartTime) &
+  reputation(Ag, Reputation)
+<-
+  updateReputation(StartTime, Deadline, Reputation, NewReputation);
+  -reputation(Ag, Reputation);
+  +reputation(Ag, NewReputation); 
+  .print("Reputation of Agent ", Ag, " updated to ", NewReputation).
 
 
 // Additional behavior
